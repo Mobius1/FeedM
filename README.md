@@ -56,12 +56,12 @@ TriggerClientEvent("FeedM:showNotification", source, Message, Interval, Type)
 
 #### Trigger advanced notification from client
 ```lua
-TriggerEvent("FeedM:showAdvancedNotification", Title, Subtitle, Message, Icon, Interval, Type)
+TriggerEvent("FeedM:showAdvancedNotification", Title, Subject, Message, Icon, Interval, Type)
 ```
 
 #### Trigger advanced notification from server
 ```lua
-TriggerClientEvent("FeedM:showAdvancedNotification", source, Title, Subtitle, Message, Icon, Interval, Type)
+TriggerClientEvent("FeedM:showAdvancedNotification", source, Title, Subject, Message, Icon, Interval, Type)
 ```
 
 Available params
@@ -69,10 +69,10 @@ Available params
 * `Interval` - The duration in `ms` you want the notification to be displayed
 * `Type` - Determines the bg color of the message box (`primary`, `success`, `warning`, `danger`)
 * `Title` - The title of the notification (advanced only)
-* `Subtitle` - The subtitle of the notification (advanced only)
+* `Subject` - The subject of the notification (advanced only)
 * `Icon` - The icon to be used (advanced only)
 
-## Exports
+## Client Functions
 
 #### Show notification
 ```lua
@@ -81,7 +81,7 @@ exports.FeedM:ShowNotification(Message, Interval, Type)
 
 #### Show advanced notification
 ```lua
-exports.FeedM:ShowNotification(Title, Subtitle, Message, Icon, Interval, Type)
+exports.FeedM:ShowNotification(Title, Subject, Message, Icon, Interval, Type)
 ```
 
 ## To Do
