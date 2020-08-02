@@ -284,7 +284,7 @@ function AddMessage(Message, Interval, BG, Index, Advanced, Title, Subject, Icon
 
     Queue = Queue + 1        
 
-    -- Need to find the correct feed message sound to play here
+    -- NEED TO FIND THE CORRECT FEED MESSAGE SOUND TO PLAY HERE
     -- PlaySoundFrontend(-1, "FestiveGift", "Feed_Message_Sounds", 0)
 end
 

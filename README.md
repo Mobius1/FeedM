@@ -22,7 +22,7 @@ Customisable native feed notifications for FiveM
 
 * Download and extract the package: https://github.com/Mobius1/FeedM/archive/master.zip
 * Rename the `FeedM-master` directory to `FeedM`
-* Drop the `FeedM` directory into your `[esx]` directory on your server
+* Drop the `FeedM` directory into your `resources` directory on your server
 * Add `start FeedM` in your `server.cfg`
 * Edit `config.lua` to your liking
 * Start your server and rejoice!
