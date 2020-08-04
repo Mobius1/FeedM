@@ -36,7 +36,7 @@ function GetLineCount(Text, X, Y, X1, X2)
 end
 
 function GetMessageHeight(Message, X, Y)
-    local Lines = GetLineCount(Message.text,
+    local Lines = GetLineCount(Message.Message,
         X,
         Y,
         (Config.Positions[Config.Position].x - (Config.Width / 2)) + Config.Padding, 

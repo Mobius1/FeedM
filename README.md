@@ -6,6 +6,8 @@ Customisable native feed notifications for FiveM
 * Can be positioned anywhere on screen unlike the native GTA:O notifications
 * Customisable colors, fonts, etc
 * Standard and advanced notifications
+* Animated stacking and fading
+* Supports reverse stacking for positioning at top of screen
 * Supports message formatting
 * Supports queuing and duplicate notifications
 
@@ -41,6 +43,7 @@ Config.Padding = 0.006      -- Box padding
 Config.Spacing = 0.005      -- Box margin / seperation
 Config.Queue = 5            -- Message queue
 Config.Position = "left"    -- Position
+Config.Animation = true     -- Toggle animation (fade out, stacking, etc)
 ```
 
 ## Events

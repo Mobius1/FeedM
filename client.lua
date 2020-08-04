@@ -138,7 +138,7 @@ function InitThreads()
                         )                       
 
                         -- DRAW MESSAGE
-                        RenderText(Message.text,
+                        RenderText(Message.Message,
                             Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2),
                             (Message.ny - (Message.BoxHeight / 2)) + Message.Icon.H + Config.Padding,
                             Message.Opacity.Text.Current, 
@@ -171,7 +171,7 @@ function InitThreads()
                         )                         
 
                         -- DRAW MESSAGE
-                        RenderText(Message.text,
+                        RenderText(Message.Message,
                             Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2),
                             ((Message.ny - (Message.Height / 2)) + Config.Padding) - 0.004,
                             Message.Opacity.Text.Current, 
@@ -254,14 +254,14 @@ end
 --                       FUNCTIONS                        --
 ------------------------------------------------------------
 
-function BuildMessage(Text, Interval, Type, Advanced, Title, Subject, Icon)
+function BuildMessage(Message, Interval, Type, Advanced, Title, Subject, Icon)
 
     WaitTime = 0
 
     Interval = Interval or 5000
 
-    if Text == nil then
-        Text = '~r~ERROR : ~s~The text of the notification is nil.'
+    if Message == nil then
+        Message = '~r~ERROR : ~s~The text of the notification is nil.'
     end
 
     local BG = Config.Types.primary
@@ -277,7 +277,20 @@ function BuildMessage(Text, Interval, Type, Advanced, Title, Subject, Icon)
         end
     end
 
-    AddMessage(Text, Interval, BG, Advanced, Title, Subject, Icon) 
+    -- DUPLICATE CHECK
+    for k, v in ipairs(Messages) do
+        if Advanced then
+            if v.Title == Title and v.Message == Message and v.Subject == Subject and v.Icon.Thumb == Icon then
+                return false
+            end
+        else
+            if v.Message == Message then
+                return false
+            end
+        end
+    end    
+
+    AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon) 
 end
 
 function QueueMessage(Message, Interval, Type)
@@ -309,7 +322,7 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
             H = 0
         },
         Index = Counter,
-        text = Message,
+        Message = Message,
         Interval = Interval,
         BG = BG,
         Hiding = false,
@@ -397,7 +410,6 @@ function ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, Type)
         end        
     end
 end
-
 
 ------------------------------------------------------------
 --                        EXPORTS                         --
