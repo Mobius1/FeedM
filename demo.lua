@@ -15,6 +15,17 @@ RegisterCommand("addAdvancedMessage", function(source, args, raw)
     end
 end)
 
+RegisterCommand("queuedMessages", function(source, args, raw)
+    Citizen.CreateThread(function()
+        Citizen.Wait(2000)
+        for i = 1, 5 do
+            TriggerEvent("feedM:showNotification", "~g~FeedM: ~s~Queued Notification ~b~" .. i)
+            Citizen.Wait(500)
+        end
+    end)
+end)
+
+
 RegisterCommand("demoMessage", function(source, args, raw)
 
     local arr = { "standard", "standard_long",  "advanced", "advanced_long" }
@@ -122,15 +133,15 @@ RegisterCommand("demoMessage", function(source, args, raw)
 
     Citizen.CreateThread(function()
 
-        Citizen.Wait(1000)
+        -- Citizen.Wait(1000)
         ShowNotification("This is a ~b~notification", 5000)
-        Citizen.Wait(1000)
+        Citizen.Wait(100)
         ShowAdvancedNotification("Title", "Subtitle", "This is an ~g~advanced ~b~notification", "CHAR_" .. random_elem(icons), 5000)
-        Citizen.Wait(1000)        
+        Citizen.Wait(100)        
         ShowNotification("~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", 5000)
-        Citizen.Wait(1000)
+        Citizen.Wait(100)
         ShowAdvancedNotification("Title", "Subtitle", "~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", "CHAR_" .. random_elem(icons), 5000)
-        Citizen.Wait(1000)
+        Citizen.Wait(100)
    
 
         for i = 1, 10 do
@@ -138,15 +149,17 @@ RegisterCommand("demoMessage", function(source, args, raw)
 
             if type == "standard" then
                 ShowNotification("This is a ~b~notification", 5000, random_elem(types))
+                Citizen.Wait(100) 
             elseif type == "standard_long" then
                 ShowNotification("~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", 5000, random_elem(types))
+                Citizen.Wait(100) 
             elseif type == "advanced" then
                 ShowAdvancedNotification("Title", "Subtitle", "This is an ~g~advanced ~b~notification", "CHAR_" .. random_elem(icons), 5000, random_elem(types))
+                Citizen.Wait(100) 
             elseif type == "advanced_long" then
                 ShowAdvancedNotification("Title", "Subtitle", "~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", "CHAR_" .. random_elem(icons), 5000, random_elem(types))
+                Citizen.Wait(100) 
             end
-
-            Citizen.Wait(1000)
         end
     end)
 end)
