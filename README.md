@@ -91,11 +91,11 @@ exports.FeedM:ShowNotification(Title, Subject, Message, Icon, Interval, Type)
 
 ## To Do
 - [x] ~~Support queuing~~
-- [ ] Support duplicate notifications
+- [x] Support duplicate notifications
 - [x] ~~Remove ESX dependency~~
 - [ ] Allow saving to `Info > Notifications` tab
 - [ ] Allow notification sound
-- [ ] Allow top-bottom stacking
+- [x] Allow top-bottom stacking
 - [ ] Allow overflow of large messages into another notification box
 
 ## Contributing
