@@ -1,6 +1,7 @@
 Messages    = {}
 WaitTime    = 500
 Counter     = 1
+CanQueue    = Config.Queue > 0
 Queue       = 0
 Queued      = {}
 Top         = string.match(Config.Position, "top")
@@ -50,36 +51,44 @@ function InitThreads()
 
                     -- FADE OUT
                     if Message.StartHiding then
-                        Message.Opacity.Box.Current = math.ceil(Message.Opacity.Box.Current - Message.Opacity.Box.Increment)
-                        Message.Opacity.Text.Current = math.ceil(Message.Opacity.Text.Current - Message.Opacity.Text.Increment)
+                        if Config.Animation then
+                            Message.Opacity.Box.Current = math.ceil(Message.Opacity.Box.Current - Message.Opacity.Box.Increment)
+                            Message.Opacity.Text.Current = math.ceil(Message.Opacity.Text.Current - Message.Opacity.Text.Increment)
 
-                        if Message.Opacity.Box.Current <= 0 or Message.Opacity.Text.Current <= 0 then
-                            Message.Opacity.Box.Current = 0
-                            Message.Opacity.Text.Current = 0
+                            if Message.Opacity.Box.Current <= 0 or Message.Opacity.Text.Current <= 0 then
+                                Message.Opacity.Box.Current = 0
+                                Message.Opacity.Text.Current = 0
 
+                                Message.Hidden = true
+                            end
+                        else
                             Message.Hidden = true
-                        end                                
+                        end                           
                     end
 
                     Message.Offset = Message.y + PosY
 
-                    if Top then
-                        if Message.ny <= Message.Offset then
-                            Message.ny = Message.ny + 0.008
-                        end
+                    if Config.Animation then
+                        if Top then
+                            if Message.ny <= Message.Offset then
+                                Message.ny = Message.ny + 0.008
+                            end
 
-                        if Message.ny > Message.Offset then
-                            Message.ny = Message.Offset
+                            if Message.ny > Message.Offset then
+                                Message.ny = Message.Offset
+                            end
+                        else
+                            if Message.ny >= Message.Offset then
+                                Message.ny = Message.ny - 0.008
+                            end
+        
+                            if Message.ny < Message.Offset then
+                                Message.ny = Message.Offset
+                            end
                         end
                     else
-                        if Message.ny >= Message.Offset then
-                            Message.ny = Message.ny - 0.008
-                        end
-    
-                        if Message.ny < Message.Offset then
-                            Message.ny = Message.Offset
-                        end
-                    end                    
+                        Message.ny = Message.Offset
+                    end                   
   
                     if Message.Advanced then -- ADVANCED NOTIFICATION   
                         -- DRAW BOX
@@ -197,7 +206,11 @@ function InitThreads()
         while true do
             for i,Message in ipairs(Messages) do
                 if Message.Hidden and Message.Remove then
+
+                    -- UPDATE QUEUE
                     Queue = Queue - 1
+
+                    -- REMOVE THE MESSAGE
                     table.remove(Messages, i)
                 end
             end
@@ -228,7 +241,6 @@ function InitThreads()
                 end
             end
 
-            -- INCREASE WAIT TIME IF NO MESSAGES ARE ACTIVE
             Citizen.Wait(WaitTime)
         end
     end)    
@@ -248,7 +260,6 @@ function BuildMessage(Text, Interval, Type, Advanced, Title, Subject, Icon)
 
     Interval = Interval or 5000
 
-
     if Text == nil then
         Text = '~r~ERROR : ~s~The text of the notification is nil.'
     end
@@ -266,19 +277,7 @@ function BuildMessage(Text, Interval, Type, Advanced, Title, Subject, Icon)
         end
     end
 
-    -- ADD MESSAGE TO RENDER THREAD
-    -- if Config.Queue > 0 then
-        -- QUEUED
-        -- Citizen.CreateThread(function()
-        --     while Queue > Config.Queue - 1 do
-        --         Citizen.Wait(0)
-        --     end
-        --     AddMessage(Text, Interval, BG, Advanced, Title, Subject, Icon)      
-        -- end)
-    -- else
-        -- NON-QUEUED
-        AddMessage(Text, Interval, BG, Advanced, Title, Subject, Icon) 
-    -- end
+    AddMessage(Text, Interval, BG, Advanced, Title, Subject, Icon) 
 end
 
 function QueueMessage(Message, Interval, Type)
@@ -366,7 +365,10 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
     -- ENABLE MESSAGE DISPLAY
     table.insert(Messages, 1, Data)
 
-    Queue = Queue + 1    
+    -- UPDATE QUEUE
+    Queue = Queue + 1
+
+    -- UPDATE COUNTER
     Counter = Counter + 1    
 
     -- Need to find the correct feed message sound to play here
@@ -375,8 +377,7 @@ end
 
 function ShowNotification(Message, Interval, Type)
     if Config.Enabled then
-
-        if Config.Queue > 0 and Queue > Config.Queue - 1 then
+        if CanQueue and Queue > Config.Queue - 1 then
             QueueMessage(Message, Interval, Type)
         else
             BuildMessage(Message, Interval, Type)
@@ -389,7 +390,7 @@ function ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, Type)
         if not Icon then
             Icon = 'CHAR_BLANK_ENTRY'
         end
-        if Config.Queue > 0 and Queue > Config.Queue - 1 then
+        if CanQueue and Queue > Config.Queue - 1 then
             QueueAdvancedMessage(Title, Subject, Message, Icon, Interval, Type)
         else
             BuildMessage(Message, Interval, Type, true, Title, Subject, Icon)

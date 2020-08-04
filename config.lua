@@ -11,6 +11,8 @@ Config.Spacing = 0.005              -- Box margin / seperation
 
 Config.Queue = 5                    -- Message queue
 
+Config.Animation = true             -- Animate messages
+
 Config.Position = "bottomLeft"      -- Position
 
 Config.Positions = {
