@@ -62,35 +62,26 @@ function InitThreads()
                     end
 
                     Message.Offset = Message.y + PosY
-  
-                    if Message.Advanced then -- ADVANCED NOTIFICATION   
 
-                        if Top then
-                            if Message.ny <= Message.Offset then
-                                Message.ny = Message.ny + 0.008
-                            end
-
-                            if Message.ny > Message.Offset then
-                                Message.ny = Message.Offset
-                            end
-                        else
-                            if Message.ny >= Message.Offset then
-                                Message.ny = Message.ny - 0.008
-                            end
-    
-                            if Message.ny < Message.Offset then
-                                Message.ny = Message.Offset
-                            end
-                        end 
-                        
-                        local BY = Message.ny - Message.BoxHeight
-                        local NY = Message.ny - (Message.BoxHeight / 2)
-
-                        if Top then
-                            -- BY = Message.ny - (Message.BoxHeight / 2)
-                            NY = Message.ny
+                    if Top then
+                        if Message.ny <= Message.Offset then
+                            Message.ny = Message.ny + 0.008
                         end
 
+                        if Message.ny > Message.Offset then
+                            Message.ny = Message.Offset
+                        end
+                    else
+                        if Message.ny >= Message.Offset then
+                            Message.ny = Message.ny - 0.008
+                        end
+    
+                        if Message.ny < Message.Offset then
+                            Message.ny = Message.Offset
+                        end
+                    end                    
+  
+                    if Message.Advanced then -- ADVANCED NOTIFICATION   
                         -- DRAW BOX
                         DrawSprite(
                             'commonmenu',
@@ -128,7 +119,7 @@ function InitThreads()
                             X2
                         )   
 
-                        -- DRAW Subject
+                        -- DRAW SUBJECT
                         RenderText(Message.Subject,
                             (Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2)) + Message.Icon.W,
                             ((Message.ny - (Message.BoxHeight / 2) + Config.Padding) - 0.004) + TextHeight,
@@ -146,6 +137,7 @@ function InitThreads()
                             X2
                         )    
 
+                        -- INCREMENT POSITION BY MESSAGE HEIGHT
                         if Top then
                             PosY = PosY + Message.BoxHeight + Config.Spacing
                         else
@@ -153,24 +145,7 @@ function InitThreads()
                         end
 
                     else  -- STANDARD NOTIFICATION
-                        if Top then
-                            if Message.ny <= Message.Offset then
-                                Message.ny = Message.ny + 0.008
-                            end
-
-                            if Message.ny > Message.Offset then
-                                Message.ny = Message.Offset
-                            end
-                        else
-                            if Message.ny >= Message.Offset then
-                                Message.ny = Message.ny - 0.008
-                            end
-    
-                            if Message.ny < Message.Offset then
-                                Message.ny = Message.Offset
-                            end
-                        end
-
+                        
                         -- DRAW BOX
                         DrawSprite(
                             'commonmenu',
@@ -195,6 +170,7 @@ function InitThreads()
                             X2
                         )
                         
+                        -- INCREMENT POSITION BY MESSAGE HEIGHT
                         if Top then
                             PosY = PosY + Message.Height + Config.Spacing
                         else
@@ -204,7 +180,6 @@ function InitThreads()
 
                     -- FLAG MESSAGE FOR REMOVAL
                     if Message.Hidden then
-                        -- Queue = Queue - 1
                         Citizen.SetTimeout(2000, function()
                             Message.Remove = true
                         end)
@@ -238,6 +213,7 @@ function InitThreads()
         end
     end)
 
+    -- QUEUE THREAD
     Citizen.CreateThread(function()
         while true do
             for i,Message in ipairs(Queued) do
@@ -251,8 +227,9 @@ function InitThreads()
                     table.remove(Queued, i)
                 end
             end
-    
-            Citizen.Wait(0)
+
+            -- INCREASE WAIT TIME IF NO MESSAGES ARE ACTIVE
+            Citizen.Wait(WaitTime)
         end
     end)    
 end

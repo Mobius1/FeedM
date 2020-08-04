@@ -132,8 +132,6 @@ RegisterCommand("demoMessage", function(source, args, raw)
     }
 
     Citizen.CreateThread(function()
-
-        -- Citizen.Wait(1000)
         ShowNotification("This is a ~b~notification", 5000)
         Citizen.Wait(100)
         ShowAdvancedNotification("Title", "Subtitle", "This is an ~g~advanced ~b~notification", "CHAR_" .. random_elem(icons), 5000)
