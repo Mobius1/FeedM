@@ -14,9 +14,10 @@ Customisable native feed notifications for FiveM
 ## Demo Videos
 
 * [Standard](https://streamable.com/05s12l)
-* [Right Positioned](https://streamable.com/kxx4gq)
+* [Bottom-Right Positioned](https://streamable.com/kxx4gq)
+* [Top-Right Positioned](https://streamable.com/6b8rgs)
 * [Queued](https://streamable.com/idwk31)
-
+* [No animation](https://streamable.com/fx1zmd)
 ## Requirements
 
 * None
