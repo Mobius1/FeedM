@@ -13,6 +13,7 @@ Customisable native feed notifications for FiveM
 
 ##### [Standard](https://streamable.com/05s12l)
 ##### [Right Positioned](https://streamable.com/kxx4gq)
+##### [Queued](https://streamable.com/idwk31)
 
 ## Requirements
 
