@@ -36,15 +36,15 @@ Customisable native feed notifications for FiveM
 The `config.lua` file is set to emulate GTA:O as close as possible, but can be changed to fit your own needs.
 
 ```lua
-Config.Enabled = true       -- Enable / disable
-Config.Font = 4             -- Font family
-Config.Scale = 0.38         -- Font size
-Config.Width = 0.145        -- Box width
-Config.Padding = 0.006      -- Box padding
-Config.Spacing = 0.005      -- Box margin / seperation
-Config.Queue = 5            -- Message queue
-Config.Position = "left"    -- Position
-Config.Animation = true     -- Toggle animation (fade out, stacking, etc)
+Config.Enabled = true               -- Enable / disable
+Config.Font = 4                     -- Font family
+Config.Scale = 0.38                 -- Font size
+Config.Width = 0.145                -- Box width
+Config.Padding = 0.006              -- Box padding
+Config.Spacing = 0.005              -- Box margin / seperation
+Config.Queue = 5                    -- Message queue
+Config.Position = "bottomLeft"      -- Position
+Config.Animation = true             -- Toggle animation (fade out, stacking, etc)
 ```
 
 ## Events
