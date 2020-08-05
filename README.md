@@ -86,7 +86,7 @@ exports.FeedM:ShowNotification(Message, Interval, Type)
 
 #### Show advanced notification
 ```lua
-exports.FeedM:ShowNotification(Title, Subject, Message, Icon, Interval, Type)
+exports.FeedM:ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, Type)
 ```
 
 ## To Do
