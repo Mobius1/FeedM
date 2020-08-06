@@ -2,6 +2,8 @@ Config = {}
 
 Config.Enabled = true               -- Enable / disable
 
+Config.Debug = false
+
 Config.Font = 4                     -- Font family
 Config.Scale = 0.38                 -- Font size
 
@@ -16,7 +18,7 @@ Config.Animation = true             -- Animate messages
 Config.Position = "bottomLeft"      -- Position
 
 Config.Positions = {
-    bottomLeft = { x = 0.085, y = 0.79 },
+    bottomLeft = { x = 0.085, y = 0.7 },
     bottomRight = { x = 0.92, y = 0.98 },
     topLeft = { x = 0.085, y = 0.02 },
     topRight = { x = 0.92, y = 0.02 },

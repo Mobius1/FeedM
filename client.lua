@@ -12,23 +12,28 @@ Top         = string.match(Config.Position, "top")
 
 function InitThreads()
 
-    Citizen.CreateThread(function()
-        while true do
+    -- Debug Thread
+    if Config.Debug then
+        local width, height = GetActiveScreenResolution()
+        Citizen.CreateThread(function()
+            while true do
 
-            DrawRect(
-                Config.Positions[Config.Position].x, 
-                Config.Positions[Config.Position].y, 
-                Config.Width, 
-                1 / 1080,
-                255,
-                255,
-                255,
-                255
-            )
+                -- DRAW LINE TO SHOW POSITION OF NOTIFICATIONS
+                DrawRect(
+                    Config.Positions[Config.Position].x, 
+                    Config.Positions[Config.Position].y, 
+                    Config.Width, 
+                    1 / height,
+                    255,
+                    255,
+                    255,
+                    255
+                )
 
-            Citizen.Wait(0)
-        end
-    end)
+                Citizen.Wait(0)
+            end
+        end)
+    end
 
     -- MAIN RENDER THREAD
     Citizen.CreateThread(function()
@@ -423,12 +428,12 @@ exports('ShowAdvancedNotification', ShowAdvancedNotification)
 --                         EVENTS                         --
 ------------------------------------------------------------
 
-RegisterNetEvent('feedM:showNotification')
-AddEventHandler("feedM:showNotification", function(Message, Interval, Type)
+RegisterNetEvent('FeedM:showNotification')
+AddEventHandler("FeedM:showNotification", function(Message, Interval, Type)
     ShowNotification(Message, Interval, Type)
 end)
 
-RegisterNetEvent('feedM:showAdvancedNotification')
-AddEventHandler("feedM:showAdvancedNotification", function(Title, Subject, Message, Icon, Interval, Type)
+RegisterNetEvent('FeedM:showAdvancedNotification')
+AddEventHandler("FeedM:showAdvancedNotification", function(Title, Subject, Message, Icon, Interval, Type)
     ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, Type)
 end)
