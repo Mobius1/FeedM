@@ -98,7 +98,7 @@ exports.FeedM:ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, 
 Config.Positions = {
     ...
     myCustomPosition = {
-        x = 0.5, -- Centered horizontally
+        x = 0.5,
         y = 0.98
     }
 }
