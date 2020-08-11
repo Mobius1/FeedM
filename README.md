@@ -112,7 +112,7 @@ Config.Position = "myCustomPosition"
 
 #### NOTE: Positioning is relative to the bottom-center of the message box so setting `x = 0.5` will align the center of the box to the center of the screen horizontally and setting `y = 0.5` will position the bottom of the box with the vertical center of the screen.
 
-![Demo Image 1](https://i.imgur.com/DWvBg55.png)
+![Demo Image 1](https://i.imgur.com/1Kfqnqz.png)
 
 
 
