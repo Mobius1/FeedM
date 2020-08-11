@@ -94,6 +94,8 @@ exports.FeedM:ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, 
 
 `FeedM` comes with popular positions already added, but should you need to define a custom position you can either edit the current ones or add a new one to the `Config.Positions` table in `config.lua`.
 
+Positions below vertical center or keys containing the word `bottom` will cause messages to stack upward (old messages will be pushed upwards) and those above vertical center or keys containing the word `top` will cause messages to stack downwards (old messages will be pushed downwards).
+
 ```lua
 Config.Positions = {
     bottomLeft  = { x = 0.085,  y = 0.70 },
