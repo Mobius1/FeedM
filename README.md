@@ -90,9 +90,26 @@ exports.FeedM:ShowNotification(Message, Interval, Type)
 exports.FeedM:ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, Type)
 ```
 
-## Custom Positioning
+## Positioning
 
-`FeedM` comes with popular positions already added, but should you need to define a custom position you can either edit the current ones or add a new one to the `Config.Positions` table in `config.lua`:
+`FeedM` comes with popular positions already added, but should you need to define a custom position you can either edit the current ones or add a new one to the `Config.Positions` table in `config.lua`.
+
+```lua
+Config.Positions = {
+    bottomLeft  = { x = 0.085,  y = 0.70 },
+    bottomRight = { x = 0.92,   y = 0.98 },
+    topLeft     = { x = 0.085,  y = 0.02 },
+    topRight    = { x = 0.92,   y = 0.02 }
+}
+```
+
+**NOTE: Positioning is relative to the bottom-center of the message box so setting `x = 0.5` will align the center of the box to the center of the screen horizontally and setting `y = 0.5` will position the bottom of the box with the vertical center of the screen.**
+
+#### ![Demo Image 1](https://i.imgur.com/1Kfqnqz.png)
+
+## Custom Positions
+
+To add your own custom position, just add a new entry to the `Config.Positions` table in `config.lua`:
 
 ```lua
 Config.Positions = {
@@ -110,10 +127,9 @@ Now tell `FeedM` to use your custom position:
 Config.Position = "myCustomPosition"
 ```
 
-#### NOTE: Positioning is relative to the bottom-center of the message box so setting `x = 0.5` will align the center of the box to the center of the screen horizontally and setting `y = 0.5` will position the bottom of the box with the vertical center of the screen.
+Result
 
-![Demo Image 1](https://i.imgur.com/1Kfqnqz.png)
-
+#### ![Demo Image 2](https://i.imgur.com/iBvAr8i.png)
 
 
 ## To Do
