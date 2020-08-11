@@ -45,6 +45,7 @@ Config.Spacing = 0.005              -- Box margin / seperation
 Config.Queue = 5                    -- Message queue
 Config.Position = "bottomLeft"      -- Position
 Config.Animation = true             -- Toggle animation (fade out, stacking, etc)
+Config.FilterDuplicates = true      -- Filter out duplicate notifications
 ```
 
 ## Events
