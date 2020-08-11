@@ -129,7 +129,7 @@ Config.Position = "myCustomPosition"
 
 Result
 
-#### ![Demo Image 2](https://i.imgur.com/iBvAr8i.png)
+#### ![Demo Image 2](https://i.imgur.com/pOqI6mJ.png)
 
 
 ## To Do
