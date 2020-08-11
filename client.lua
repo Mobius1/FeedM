@@ -5,6 +5,7 @@ CanQueue    = Config.Queue > 0
 Queue       = 0
 Queued      = {}
 Top         = string.match(Config.Position, "top")
+Position    = Config.Positions[Config.Position]
 
 ------------------------------------------------------------
 --                        THREADS                         --
@@ -18,17 +19,16 @@ function InitThreads()
         Citizen.CreateThread(function()
             while true do
 
-                -- DRAW LINE TO SHOW POSITION OF NOTIFICATIONS
-                DrawRect(
-                    Config.Positions[Config.Position].x, 
-                    Config.Positions[Config.Position].y, 
-                    Config.Width, 
-                    1 / height,
-                    255,
-                    255,
-                    255,
-                    255
-                )
+                local offset = 0
+
+                if Top then offset = 0.1 end
+
+                -- DRAW BOX TO SHOW POSITION OF NOTIFICATIONS
+                DrawRect(Position.x,Position.y+offset,Config.Width,2/height,255,255,255,100)
+                DrawRect(Position.x,Position.y-0.1+offset,Config.Width,2/height,255,255,255,100)
+                DrawRect(Position.x-Config.Width/2,Position.y-0.05+offset,2/width,0.1,255,255,255,100)
+                DrawRect(Position.x+Config.Width/2,Position.y-0.05+offset,2/width,0.1,255,255,255,100)
+                RenderText("FeedM",Position.x-Config.Width/2+Config.Padding,Position.y-0.1+Config.Padding+offset,100,Position.x-Config.Width/2+Config.Padding,Position.x-Config.Width/2+Config.Width)
 
                 Citizen.Wait(0)
             end
@@ -39,10 +39,10 @@ function InitThreads()
     Citizen.CreateThread(function()
         while true do
 
-            local PosX = Config.Positions[Config.Position].x - (Config.Width / 2)
+            local PosX = Position.x - (Config.Width / 2)
             local PosY = 0
             local X1 = PosX + Config.Padding
-            local X2 = (Config.Positions[Config.Position].x + (Config.Width / 2)) - Config.Padding
+            local X2 = (Position.x + (Config.Width / 2)) - Config.Padding
 
             for i,Message in ipairs(Messages) do
                 if not Message.Hidden then
@@ -103,7 +103,7 @@ function InitThreads()
                         DrawSprite(
                             'commonmenu',
                             'gradient_bgd',
-                            Config.Positions[Config.Position].x, 
+                            Position.x, 
                             Message.ny, 
                             Config.Width, 
                             Message.BoxHeight,
@@ -129,7 +129,7 @@ function InitThreads()
                             
                         -- DRAW TITLE
                         RenderText(Message.Title,
-                            (Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2)) + Message.Icon.W,
+                            (Config.Padding + Position.x - (Config.Width / 2)) + Message.Icon.W,
                             (Message.ny - (Message.BoxHeight / 2) + Config.Padding) - 0.004,
                             Message.Opacity.Text.Current, 
                             X1 + Message.Icon.W, 
@@ -138,7 +138,7 @@ function InitThreads()
 
                         -- DRAW SUBJECT
                         RenderText(Message.Subject,
-                            (Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2)) + Message.Icon.W,
+                            (Config.Padding + Position.x - (Config.Width / 2)) + Message.Icon.W,
                             ((Message.ny - (Message.BoxHeight / 2) + Config.Padding) - 0.004) + TextHeight,
                             Message.Opacity.Text.Current, 
                             X1 + Message.Icon.W, 
@@ -147,7 +147,7 @@ function InitThreads()
 
                         -- DRAW MESSAGE
                         RenderText(Message.Message,
-                            Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2),
+                            Config.Padding + Position.x - (Config.Width / 2),
                             (Message.ny - (Message.BoxHeight / 2)) + Message.Icon.H + Config.Padding,
                             Message.Opacity.Text.Current, 
                             X1, 
@@ -167,7 +167,7 @@ function InitThreads()
                         DrawSprite(
                             'commonmenu',
                             'gradient_bgd',
-                            Config.Positions[Config.Position].x, 
+                            Position.x, 
                             Message.ny, 
                             Config.Width, 
                             Message.Height,
@@ -180,7 +180,7 @@ function InitThreads()
 
                         -- DRAW MESSAGE
                         RenderText(Message.Message,
-                            Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2),
+                            Config.Padding + Position.x - (Config.Width / 2),
                             ((Message.ny - (Message.Height / 2)) + Config.Padding) - 0.004,
                             Message.Opacity.Text.Current, 
                             X1, 
@@ -336,8 +336,8 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
         Interval = Interval,
         BG = BG,
         Hiding = false,
-        y = Config.Positions[Config.Position].y,
-        ny = Config.Positions[Config.Position].y,
+        y = Position.y,
+        ny = Position.y,
         Opacity = {
             Text = { Current = 255, Increment = 255 / 20},
             Box = { Current = BG.a, Increment = BG.a / 20},
@@ -345,7 +345,7 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
     }
 
     -- GET MESSAGE HEIGHT
-    Data.Height = GetMessageHeight(Data, Config.Padding + Config.Positions[Config.Position].x - (Config.Width / 2), Config.Positions[Config.Position].y)   
+    Data.Height = GetMessageHeight(Data, Config.Padding + Position.x - (Config.Width / 2), Position.y)   
 
     -- ADVANCED NOTIFICATION ICON
     if Advanced then

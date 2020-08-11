@@ -122,8 +122,8 @@ end)
 RegisterCommand("queuedMessages", function(source, args, raw)
     Citizen.CreateThread(function()
         Citizen.Wait(2000)
-        for i = 1, 5 do
-            TriggerEvent("feedM:showNotification", "~g~FeedM: ~s~Queued Notification ~b~" .. i)
+        for i = 1, 10 do
+            ShowNotification("~g~FeedM: ~s~Queued Notification ~b~" .. i)
             Citizen.Wait(500)
         end
     end)
