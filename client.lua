@@ -48,6 +48,9 @@ function InitThreads()
                 if not Message.Hidden then
                     -- START FADE OUT AFTER INTERVAL
                     if not Message.Ready then
+                        -- Need to find the correct feed message sound to play here
+                        -- PlaySoundFrontend(-1, "NAV", "HUD_AMMO_SHOP_SOUNDSET", 1)
+
                         Message.Ready = true
                         Citizen.SetTimeout(Message.Interval, function()
                             Message.StartHiding = true
@@ -283,16 +286,18 @@ function BuildMessage(Message, Interval, Type, Advanced, Title, Subject, Icon)
     end
 
     -- DUPLICATE CHECK
-    for k, v in ipairs(Messages) do
-        if Advanced then
-            if v.Title == Title and v.Message == Message and v.Subject == Subject and v.Icon.Thumb == Icon then
-                return false
+    if Config.FilterDuplicates then
+        for k, v in ipairs(Messages) do
+            if Advanced then
+                if v.Title == Title and v.Message == Message and v.Subject == Subject and v.Icon.Thumb == Icon then
+                    return false
+                end
+            else
+                if v.Message == Message then
+                    return false
+                end
             end
-        else
-            if v.Message == Message then
-                return false
-            end
-        end
+        end    
     end    
 
     AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon) 
@@ -388,9 +393,6 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
 
     -- UPDATE COUNTER
     Counter = Counter + 1    
-
-    -- Need to find the correct feed message sound to play here
-    -- PlaySoundFrontend(-1, "FestiveGift", "Feed_Message_Sounds", 0)
 end
 
 function ShowNotification(Message, Interval, Type)

@@ -6,7 +6,7 @@ description 'FeedM'
 
 author 'Karl Saunders'
 
-version '0.0.5'
+version '0.0.6'
 
 client_scripts {
     'config.lua',

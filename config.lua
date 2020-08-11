@@ -11,7 +11,9 @@ Config.Width = 0.145                -- Box width
 Config.Padding = 0.006              -- Box padding
 Config.Spacing = 0.005              -- Box margin / seperation
 
-Config.Queue = 5                    -- Message queue
+Config.Queue = 10                   -- Message queue
+
+Config.FilterDuplicates = true      -- Filter out duplicate notifications
 
 Config.Animation = true             -- Animate messages
 
