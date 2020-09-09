@@ -2,6 +2,7 @@
 Customisable native feed notifications for FiveM
 
 ## Features
+* Uses native UI
 * Designed to emulate the native GTA:O feed system
 * Can be positioned anywhere on screen unlike the native GTA:O notifications
 * Customisable colors, fonts, etc
@@ -9,7 +10,7 @@ Customisable native feed notifications for FiveM
 * Animated stacking and fading
 * Supports reverse stacking for positioning at top of screen
 * Supports message formatting
-* Supports queuing and duplicate notifications
+* Supports queuing and filtering duplicate notifications
 
 ## Contents
 
