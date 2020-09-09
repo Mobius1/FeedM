@@ -123,8 +123,15 @@ RegisterCommand("queuedMessages", function(source, args, raw)
     Citizen.CreateThread(function()
         Citizen.Wait(2000)
         for i = 1, 10 do
-            ShowNotification("~g~FeedM: ~s~Queued Notification ~b~" .. i)
-            Citizen.Wait(500)
+            local type = random_elem(arr)
+
+            if type == "standard" or type == "standard_long" then
+                ShowNotification("~g~FeedM: ~s~Queued Notification ~b~" .. i)
+            elseif type == "advanced" or type == "advanced_long" then
+                ShowAdvancedNotification("Title", "Subtitle", "~g~FeedM: ~s~Queued Notification ~b~" .. i, "CHAR_" .. random_elem(icons))
+            end  
+            
+            Citizen.Wait(1000) 
         end
     end)
 end)

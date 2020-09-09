@@ -1,63 +1,51 @@
-Messages    = {}
-WaitTime    = 500
-Counter     = 1
-CanQueue    = Config.Queue > 0
-Queue       = 0
-Queued      = {}
-Top         = string.match(Config.Position, "top")
-Position    = Config.Positions[Config.Position]
+local MESSAGES    = {}
+local WAITTIME    = 500
+local COUNTER     = 1
+local CANQUEUE    = Config.Queue > 0
+local QUEUE       = 0
+local QUEUED      = {}
+local POSITION    = Config.Positions[Config.Position]
+local TOP         = string.match(Config.Position, "top") or POSITION.y < 0.5
 
-------------------------------------------------------------
---                        THREADS                         --
-------------------------------------------------------------
+
+--====================================================================================================================
+--                                                    THREADS                                                      --
+--====================================================================================================================
 
 function InitThreads()
 
-    -- Debug Thread
-    if Config.Debug then
-        local width, height = GetActiveScreenResolution()
-        Citizen.CreateThread(function()
-            while true do
-
-                local offset = 0
-
-                if Top then offset = 0.1 end
-
-                -- DRAW BOX TO SHOW POSITION OF NOTIFICATIONS
-                DrawRect(Position.x,Position.y+offset,Config.Width,2/height,255,255,255,100)
-                DrawRect(Position.x,Position.y-0.1+offset,Config.Width,2/height,255,255,255,100)
-                DrawRect(Position.x-Config.Width/2,Position.y-0.05+offset,2/width,0.1,255,255,255,100)
-                DrawRect(Position.x+Config.Width/2,Position.y-0.05+offset,2/width,0.1,255,255,255,100)
-                RenderText("FeedM",Position.x-Config.Width/2+Config.Padding,Position.y-0.1+Config.Padding+offset,100,Position.x-Config.Width/2+Config.Padding,Position.x-Config.Width/2+Config.Width)
-
-                Citizen.Wait(0)
-            end
-        end)
-    end
-
+    --==================================================================================
     -- MAIN RENDER THREAD
+    --==================================================================================
     Citizen.CreateThread(function()
         while true do
 
-            local PosX = Position.x - (Config.Width / 2)
+            local PosX = POSITION.x - (Config.Width / 2)
             local PosY = 0
             local X1 = PosX + Config.Padding
-            local X2 = (Position.x + (Config.Width / 2)) - Config.Padding
+            local X2 = (POSITION.x + (Config.Width / 2)) - Config.Padding
 
-            for i,Message in ipairs(Messages) do
+            for i,Message in ipairs(MESSAGES) do
                 if not Message.Hidden then
-                    -- START FADE OUT AFTER INTERVAL
+
+                    --==================================================================================
+                    -- WAIT FOR THE SET INTERVAL TO BEGIN THE FADEOUT ANIMATION
+                    --==================================================================================
                     if not Message.Ready then
                         -- Need to find the correct feed message sound to play here
                         -- PlaySoundFrontend(-1, "NAV", "HUD_AMMO_SHOP_SOUNDSET", 1)
 
                         Message.Ready = true
                         Citizen.SetTimeout(Message.Interval, function()
+                            --==================================================================================
+                            -- FLAG MESSAGE FOR FADEOUT
+                            --==================================================================================                            
                             Message.StartHiding = true
                         end)
                     end
-
-                    -- FADE OUT
+                    --==================================================================================
+                    -- MESSAGE IS FLAGGED FOR FADEOUT
+                    --==================================================================================  
                     if Message.StartHiding then
                         if Config.Animation then
                             Message.Opacity.Box.Current = math.ceil(Message.Opacity.Box.Current - Message.Opacity.Box.Increment)
@@ -76,8 +64,11 @@ function InitThreads()
 
                     Message.Offset = Message.y + PosY
 
+                    --==================================================================================
+                    -- STACKING
+                    --==================================================================================  
                     if Config.Animation then
-                        if Top then
+                        if TOP then
                             if Message.ny <= Message.Offset then
                                 Message.ny = Message.ny + 0.008
                             end
@@ -98,12 +89,18 @@ function InitThreads()
                         Message.ny = Message.Offset
                     end                   
   
+                    --==================================================================================
+                    -- RENDER THE MESSAGE
+                    --==================================================================================  
                     if Message.Advanced then -- ADVANCED NOTIFICATION   
-                        -- DRAW BOX
+
+                        --==================================================================================
+                        -- RENDER THE BACKGROUND
+                        --==================================================================================  
                         DrawSprite(
                             'commonmenu',
                             'gradient_bgd',
-                            Position.x, 
+                            POSITION.x, 
                             Message.ny, 
                             Config.Width, 
                             Message.BoxHeight,
@@ -114,6 +111,9 @@ function InitThreads()
                             Message.Opacity.Box.Current
                         )                        
                         
+                        --==================================================================================
+                        -- RENDER THE ICON
+                        --==================================================================================                          
                         if Message.Icon.Ready then               
                             -- DRAW ICON
                             DrawSprite(
@@ -127,35 +127,43 @@ function InitThreads()
                             )
                         end                       
                             
-                        -- DRAW TITLE
+                        --==================================================================================
+                        -- RENDER THE TITLE
+                        --==================================================================================   
                         RenderText(Message.Title,
-                            (Config.Padding + Position.x - (Config.Width / 2)) + Message.Icon.W,
+                            (Config.Padding + POSITION.x - (Config.Width / 2)) + Message.Icon.W,
                             (Message.ny - (Message.BoxHeight / 2) + Config.Padding) - 0.004,
                             Message.Opacity.Text.Current, 
                             X1 + Message.Icon.W, 
                             X2
                         )   
 
-                        -- DRAW SUBJECT
+                        --==================================================================================
+                        -- RENDER THE SUBJECT
+                        --==================================================================================   
                         RenderText(Message.Subject,
-                            (Config.Padding + Position.x - (Config.Width / 2)) + Message.Icon.W,
+                            (Config.Padding + POSITION.x - (Config.Width / 2)) + Message.Icon.W,
                             ((Message.ny - (Message.BoxHeight / 2) + Config.Padding) - 0.004) + TextHeight,
                             Message.Opacity.Text.Current, 
                             X1 + Message.Icon.W, 
                             X2
                         )                       
 
-                        -- DRAW MESSAGE
+                        --==================================================================================
+                        -- RENDER THE MESSAGE
+                        --==================================================================================   
                         RenderText(Message.Message,
-                            Config.Padding + Position.x - (Config.Width / 2),
+                            Config.Padding + POSITION.x - (Config.Width / 2),
                             (Message.ny - (Message.BoxHeight / 2)) + Message.Icon.H + Config.Padding,
                             Message.Opacity.Text.Current, 
                             X1, 
                             X2
                         )    
 
-                        -- INCREMENT POSITION BY MESSAGE HEIGHT
-                        if Top then
+                        --==================================================================================
+                        -- OFFSET THE POSITION BY THE MESSAGE HEIGHT
+                        --==================================================================================   
+                        if TOP then
                             PosY = PosY + Message.BoxHeight + Config.Spacing
                         else
                             PosY = PosY - Message.BoxHeight - Config.Spacing
@@ -163,11 +171,13 @@ function InitThreads()
 
                     else  -- STANDARD NOTIFICATION
                         
-                        -- DRAW BOX
+                        --==================================================================================
+                        -- RENDER THE BACKGROUND
+                        --==================================================================================  
                         DrawSprite(
                             'commonmenu',
                             'gradient_bgd',
-                            Position.x, 
+                            POSITION.x, 
                             Message.ny, 
                             Config.Width, 
                             Message.Height,
@@ -178,24 +188,30 @@ function InitThreads()
                             Message.Opacity.Box.Current
                         )                         
 
-                        -- DRAW MESSAGE
+                        --==================================================================================
+                        -- RENDER THE MESSAGE
+                        --==================================================================================  
                         RenderText(Message.Message,
-                            Config.Padding + Position.x - (Config.Width / 2),
+                            Config.Padding + POSITION.x - (Config.Width / 2),
                             ((Message.ny - (Message.Height / 2)) + Config.Padding) - 0.004,
                             Message.Opacity.Text.Current, 
                             X1, 
                             X2
                         )
                         
-                        -- INCREMENT POSITION BY MESSAGE HEIGHT
-                        if Top then
+                        --==================================================================================
+                        -- OFFSET THE POSITION BY THE MESSAGE HEIGHT
+                        --==================================================================================   
+                        if TOP then
                             PosY = PosY + Message.Height + Config.Spacing
                         else
                             PosY = PosY - Message.Height - Config.Spacing
                         end
                     end
 
+                    --==================================================================================
                     -- FLAG MESSAGE FOR REMOVAL
+                    --==================================================================================   
                     if Message.Hidden then
                         Citizen.SetTimeout(2000, function()
                             Message.Remove = true
@@ -205,89 +221,94 @@ function InitThreads()
                 end
             end
 
-            Citizen.Wait(WaitTime)
+            Citizen.Wait(WAITTIME)
         end
     end)
 
+    --==================================================================================
     -- CLEAN-UP THREAD
+    --==================================================================================
     Citizen.CreateThread(function()
         while true do
-            for i,Message in ipairs(Messages) do
+            for i,Message in ipairs(MESSAGES) do
                 if Message.Hidden and Message.Remove then
 
+                    --==================================================================================
                     -- UPDATE QUEUE
-                    Queue = Queue - 1
+                    --==================================================================================
+                    QUEUE = QUEUE - 1
 
+                    --==================================================================================
                     -- REMOVE THE MESSAGE
-                    table.remove(Messages, i)
+                    --==================================================================================
+                    table.remove(MESSAGES, i)
                 end
             end
 
+            --==================================================================================
             -- INCREASE WAIT TIME IF NO MESSAGES ARE ACTIVE
-            if #Messages > 0 then
-                WaitTime = 0
+            --==================================================================================
+            if #MESSAGES > 0 then
+                WAITTIME = 0
             else
-                WaitTime = 500
+                WAITTIME = 1000
             end
 
-            Citizen.Wait(WaitTime)
+            Citizen.Wait(WAITTIME)
         end
     end)
 
+    --==================================================================================
     -- QUEUE THREAD
+    --==================================================================================
     Citizen.CreateThread(function()
         while true do
-            for i,Message in ipairs(Queued) do
-                if Queue < Config.Queue then
+            for i,Message in ipairs(QUEUED) do
+                if QUEUE < Config.Queue then
                     if Message.Advanced then
                         BuildMessage(Message.Message, Message.Interval, Message.Type, true, Message.Title, Message.Subject, Message.Icon)
                     else
                         BuildMessage(Message.Message, Message.Interval, Message.Type)
                     end
 
-                    table.remove(Queued, i)
+                    table.remove(QUEUED, i)
                 end
             end
 
-            Citizen.Wait(WaitTime)
+            Citizen.Wait(WAITTIME)
         end
     end)    
 end
 
+--==================================================================================
+-- START THREADS IF ENABLED
+--==================================================================================
 if Config.Enabled then
     InitThreads()
 end
 
-------------------------------------------------------------
---                       FUNCTIONS                        --
-------------------------------------------------------------
+
+--====================================================================================================================
+--                                                   FUNCTIONS                                                      --
+--====================================================================================================================
 
 function BuildMessage(Message, Interval, Type, Advanced, Title, Subject, Icon)
-
-    WaitTime = 0
-
-    Interval = Interval or 5000
 
     if Message == nil then
         Message = '~r~ERROR : ~s~The text of the notification is nil.'
     end
 
-    local BG = Config.Types.primary
-
-    if Type ~= nil then
-        BG = Config.Types[Type]
-
-        if BG == nil then
-            print("======================================================")
-            print("FeedM ERROR: Invalid notification type (".. Type ..")!")
-            print("======================================================")
-            return
-        end
+    if type(Message) ~= "string" and type(Message) ~= "number" then
+        print("NOT A STRING", Message)
+        return false
     end
-
+    
+    
+    --==================================================================================
     -- DUPLICATE CHECK
+    --==================================================================================
     if Config.FilterDuplicates then
-        for k, v in ipairs(Messages) do
+        for k, v in ipairs(MESSAGES) do
             if Advanced then
                 if v.Title == Title and v.Message == Message and v.Subject == Subject and v.Icon.Thumb == Icon then
                     return false
@@ -300,23 +321,32 @@ function BuildMessage(Message, Interval, Type, Advanced, Title, Subject, Icon)
         end    
     end    
 
+    WAITTIME = 0
+
+    Interval = Interval or 5000
+
+    local BG = Config.Types.primary
+
+    if Type ~= nil then
+        BG = Config.Types[Type]
+
+        if BG == nil then
+            print("======================================================")
+            print("FeedM ERROR: Invalid notification type (".. Type ..")!")
+            print("======================================================")
+            return
+        end
+    end    
+
     AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon) 
 end
 
-function QueueMessage(Message, Interval, Type)
+function QueueMessage(Message, Interval, Type, Advanced, Title, Subject, Icon)
     local Data = {
-        Message = Message, Interval = Interval, Type = Type
+        Title = Title, Subject = Subject, Icon = Icon, Message = Message, Interval = Interval, Type = Type, Advanced = Advanced
     }
 
-    table.insert(Queued, Data)
-end
-
-function QueueAdvancedMessage(Title, Subject, Message, Icon, Interval, Type)
-    local Data = {
-        Title = Title, Subject = Subject, Icon = Icon, Message = Message, Interval = Interval, Type = Type, Advanced = true
-    }
-
-    table.insert(Queued, Data)
+    table.insert(QUEUED, Data)
 end
 
 function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
@@ -331,13 +361,13 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
             W = 0,
             H = 0
         },
-        Index = Counter,
+        Index = COUNTER,
         Message = Message,
         Interval = Interval,
         BG = BG,
         Hiding = false,
-        y = Position.y,
-        ny = Position.y,
+        y = POSITION.y,
+        ny = POSITION.y,
         Opacity = {
             Text = { Current = 255, Increment = 255 / 20},
             Box = { Current = BG.a, Increment = BG.a / 20},
@@ -345,7 +375,7 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
     }
 
     -- GET MESSAGE HEIGHT
-    Data.Height = GetMessageHeight(Data, Config.Padding + Position.x - (Config.Width / 2), Position.y)   
+    Data.Height = GetMessageHeight(Data, Config.Padding + POSITION.x - (Config.Width / 2), POSITION.y)   
 
     -- ADVANCED NOTIFICATION ICON
     if Advanced then
@@ -356,7 +386,7 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
         
         Data.BoxHeight = Data.Icon.H + Data.Height + Config.Padding
 
-        -- LOAD ICON
+        -- LOAD TEXTURE DICTIONARY
         if not HasStreamedTextureDictLoaded(Icon) then
             RequestStreamedTextureDict(Icon)
 
@@ -367,7 +397,7 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
 
         Data.Icon.Ready = true
 
-        if Top then
+        if TOP then
             Data.y = Data.y + (Data.BoxHeight / 2)
             Data.ny = Data.ny + (Data.BoxHeight / 2)
         else
@@ -375,7 +405,7 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
             Data.ny = Data.ny - (Data.BoxHeight / 2)
         end 
     else
-        if Top then
+        if TOP then
             Data.y = Data.y + (Data.Height / 2)
             Data.ny = Data.ny + (Data.Height / 2)
         else
@@ -386,18 +416,18 @@ function AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon)
 
 
     -- ENABLE MESSAGE DISPLAY
-    table.insert(Messages, 1, Data)
+    table.insert(MESSAGES, 1, Data)
 
     -- UPDATE QUEUE
-    Queue = Queue + 1
+    QUEUE = QUEUE + 1
 
     -- UPDATE COUNTER
-    Counter = Counter + 1    
+    COUNTER = COUNTER + 1    
 end
 
 function ShowNotification(Message, Interval, Type)
     if Config.Enabled then
-        if CanQueue and Queue > Config.Queue - 1 then
+        if CANQUEUE and QUEUE > Config.Queue - 1 then
             QueueMessage(Message, Interval, Type)
         else
             BuildMessage(Message, Interval, Type)
@@ -410,25 +440,26 @@ function ShowAdvancedNotification(Title, Subject, Message, Icon, Interval, Type)
         if not Icon then
             Icon = 'CHAR_BLANK_ENTRY'
         end
-        if CanQueue and Queue > Config.Queue - 1 then
-            QueueAdvancedMessage(Title, Subject, Message, Icon, Interval, Type)
+        if CANQUEUE and QUEUE > Config.Queue - 1 then
+            QueueMessage(Message, Interval, Type, true, Title, Subject, Icon)
         else
             BuildMessage(Message, Interval, Type, true, Title, Subject, Icon)
         end        
     end
 end
 
-------------------------------------------------------------
---                        EXPORTS                         --
-------------------------------------------------------------
+
+--====================================================================================================================
+--                                                    EXPORTS                                                      --
+--====================================================================================================================
 
 exports('ShowNotification', ShowNotification)
 exports('ShowAdvancedNotification', ShowAdvancedNotification)
 
 
-------------------------------------------------------------
---                         EVENTS                         --
-------------------------------------------------------------
+--====================================================================================================================
+--                                                     EVENTS                                                      --
+--====================================================================================================================
 
 RegisterNetEvent('FeedM:showNotification')
 AddEventHandler("FeedM:showNotification", function(Message, Interval, Type)
