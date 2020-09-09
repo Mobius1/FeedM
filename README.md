@@ -11,6 +11,24 @@ Customisable native feed notifications for FiveM
 * Supports message formatting
 * Supports queuing and duplicate notifications
 
+## Contents
+
+* [Demos](#demo-videos)
+* [Requirements](#requirements)
+* [Download & Installation](#download--installation)
+* [Configuration](#configuration)
+* [Events](#events)
+    * [Trigger notification from client](#trigger-notification-from-client)
+    * [Trigger notification from server](#trigger-notification-from-server)
+    * [Trigger advanced notification from client](#trigger-advanced-notification-from-client)
+    * [Trigger advanced notification from server](#trigger-advanced-notification-from-server)
+* [Client Functions](#client-functions)
+    * [Show notification](#show-notification)
+    * [Show advanced notification](#show-advanced-notification)
+* [Positioning](#positioning)
+* [Custom Positions](#custom-positions)
+* [ESX Users](#esx-users)
+
 ## Demo Videos
 
 * [Standard](https://streamable.com/05s12l)
@@ -18,9 +36,11 @@ Customisable native feed notifications for FiveM
 * [Top-Right Positioned](https://streamable.com/6b8rgs)
 * [Queued](https://streamable.com/idwk31)
 * [No animation](https://streamable.com/fx1zmd)
+
 ## Requirements
 
 * None
+
 
 ## Download & Installation
 
@@ -133,6 +153,19 @@ Result
 
 #### ![Demo Image 2](https://i.imgur.com/pOqI6mJ.png)
 
+## ESX Users
+
+You can override `es_extended` to use `FeedM` notifications by editing `es_extended/client/functions.lua` and adding the `exports` functions:
+
+```lua
+ESX.ShowNotification = function(msg)
+    exports.FeedM:ShowNotification(msg)
+end
+
+ESX.ShowAdvancedNotification = function(title, subject, msg, icon, iconType)
+    exports.FeedM:ShowAdvancedNotification(title, subject, msg, icon)
+end
+```
 
 ## To Do
 - [x] ~~Support queuing~~
