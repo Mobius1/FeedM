@@ -96,7 +96,7 @@ Available params
 * `Type` - Determines the bg color of the message box (`primary`, `success`, `warning`, `danger`)
 * `Title` - The title of the notification (advanced only)
 * `Subject` - The subject of the notification (advanced only)
-* `Icon` - The icon to be used (advanced only)
+* `Icon` - The icon to be used (advanced only). A list of available icons can be found [here](https://wiki.gtanet.work/index.php?title=Notification_Pictures).
 
 ## Client Functions
 
