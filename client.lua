@@ -338,7 +338,19 @@ function BuildMessage(Message, Interval, Type, Advanced, Title, Subject, Icon)
         end
     end    
 
-    AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon) 
+    if type(Icon) == "number" then
+        -- User player headshot as icon
+        Citizen.CreateThread(function()
+            local hs = RegisterPedheadshot(Icon)
+            while not IsPedheadshotReady(hs) or not IsPedheadshotValid(hs) do
+                Citizen.Wait(0)
+            end
+            Icon = GetPedheadshotTxdString(hs)
+            AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon) 
+        end)
+    else
+        AddMessage(Message, Interval, BG, Advanced, Title, Subject, Icon) 
+    end
 end
 
 function QueueMessage(Message, Interval, Type, Advanced, Title, Subject, Icon)
