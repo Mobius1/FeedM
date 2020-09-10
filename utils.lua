@@ -32,7 +32,7 @@ function GetLineCount(Text, X, Y, X1, X2)
         end
     end
 
-    return GetTextScreenLineCount(X, Y)
+    return EndTextCommandGetLineCount(X, Y)
 end
 
 function GetMessageHeight(Message, X, Y)
