@@ -1,0 +1,225 @@
+@font-face {
+    font-family: "ChaletComprime";
+    src: url("../fonts/ChaletComprimeCologneSixty.ttf");
+}
+
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+#feedm_container {
+    width: 100vw;
+    height: 100vh;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+.feedm-notification-container {
+    position: absolute;
+    width: 13.5vw;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
+}
+
+.feedm-notification-container.notification-container-bottom {
+    bottom: 20px;
+    left: calc((100vw - 13.5vw) / 2);
+}
+
+.feedm-notification-container.notification-container-bottomleft {
+    left: 20px;
+    bottom: 30vh;
+}
+
+.feedm-notification-container.notification-container-bottomright {
+    right: 20px;
+    bottom: 20px;
+}
+
+.feedm-notification-container.notification-container-bottomright .feedm-notification {
+    right: 0;
+}
+
+.feedm-notification-container.notification-container-top {
+    top: 20px;
+    left: calc((100vw - 13.5vw) / 2);
+}
+
+.feedm-notification-container.notification-container-topleft {
+    left: 20px;
+    top: 20px;
+}
+
+.feedm-notification-container.notification-container-topright {
+    right: 20px;
+    top: 20px;
+}
+
+.feedm-notification-container.notification-container-topright .feedm-notification {
+    right: 0;
+}
+
+.feedm-notification {
+    position: absolute;
+    width: 13.5vw;
+    padding: 10px;
+    opacity: 0;
+    color: #fff;
+    background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.90)), to(rgba(0, 0, 0, 0.50)));
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.50) 100%);
+    font-family: "ChaletComprime";
+    font-size: 22px;
+}
+
+.feedm-notification.with-progress {
+    padding-bottom: 12px;
+}
+
+.feedm-notification .notification-header {
+    height: 72px;
+}
+
+.feedm-notification .notification-icon {
+    width: 68px;
+    float: left;
+    margin-right: 10px;
+}
+
+.feedm-notification .notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+}
+
+.feedm-notification .notification-progress .notification-bar {
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    -webkit-transform: scale(0, 1);
+    transform: scale(0, 1);
+    -webkit-transform-origin: 0 0 0;
+    transform-origin: 0 0 0;
+}
+
+.feedm-notification .w {
+    color: #fff;
+}
+
+.feedm-notification .r {
+    color: #f64646;
+}
+
+.feedm-notification .g {
+    color: #99cc00;
+}
+
+.feedm-notification .b {
+    color: #0099cc;
+}
+
+.feedm-notification .h {
+    font-weight: bold;
+}
+
+.feedm-notification.active {
+    opacity: 0;
+    -webkit-animation: fadeIn 500ms ease 0ms forwards;
+    animation: fadeIn 500ms ease 0ms forwards;
+}
+
+.feedm-notification.active .notification-bar {
+    -webkit-animation-name: progress;
+    animation-name: progress;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+}
+
+.feedm-notification.hiding {
+    opacity: 1;
+    -webkit-animation: fadeOut 500ms ease 0ms forwards;
+    animation: fadeOut 500ms ease 0ms forwards;
+}
+
+.feedm-notification.hiding .notification-bar {
+    width: 0%;
+}
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes progress {
+    from {
+        -webkit-transform: scale(0, 1);
+        transform: scale(0, 1);
+    }
+
+    to {
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes progress {
+    from {
+        -webkit-transform: scale(0, 1);
+        transform: scale(0, 1);
+    }
+
+    to {
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
+    }
+}

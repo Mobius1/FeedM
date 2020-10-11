@@ -1,188 +1,130 @@
-local arr = { "standard", "standard_long",  "advanced", "advanced_long" }
-local types = { "success", "warning", "danger" }
-local icons = { 
-    "ABIGAIL",
-    "ACTING_UP",
-    "AGENT14",
-    "ALL_PLAYERS_CONF",
-    "AMANDA",
-    "AMMUNATION",
-    "ANDREAS",
-    "ANTONIA",
-    "ARTHUR",
-    "ASHLEY",
-    "BANK_BOL",
-    "BANK_FLEECA",
-    "BANK_MAZE",
-    "BARRY",
-    "BEVERLY",
-    "BIKESITE",
-    "BLANK_ENTRY",
-    "BLIMP",
-    "BLIMP2",
-    "BLOCKED",
-    "BOATSITE",
-    "BOATSITE2",
-    "BROKEN_DOWN_GIRL",
-    "BRYONY",
-    "BUGSTARS",
-    "CALL911",
-    "CARSITE",
-    "CARSITE2",
-    "CARSITE3",
-    "CARSITE4",
-    "CASINO",
-    "CASINO_MANAGER",
-    "CASTRO",
-    "CHAT_CALL",
-    "CHEF",
-    "CHENG",
-    "CHENGSR",
-    "CHOP",
-    "COMIC_STORE",
-    "CRIS",
-    "DAVE",
-    "DEFAULT",
-    "DENISE",
-    "DETONATEBOMB",
-    "DETONATEPHONE",
-    "DEVIN",
-    "DIAL_A_SUB",
-    "DOM",
-    "DOMESTIC_GIRL",
-    "DREYFUSS",
-    "DR_FRIEDLANDER",
-    "ENGLISH_DAVE",
-    "EPSILON",
-    "ESTATE_AGENT",
-    "FACEBOOK",
-    "FILMNOIR",
-    "FLOYD",
-    "FRANKLIN",
-    "FRANK_TREV_CONF",
-    "GANGAPP",
-    "GAYMILITARY",
-    "HAO",
-    "HITCHER_GIRL",
-    "HUMANDEFAULT",
-    "HUNTER",
-    "JIMMY",
-    "JIMMY_BOSTON",
-    "JOE",
-    "JOSEF",
-    "JOSH",
-    "LAMAR",
-    "LAZLOW",
-    "LAZLOW2",
-    "LESTER",
-    "LESTER_DEATHWISH",
-    "LEST_FRANK_CONF",
-    "LEST_MIKE_CONF",
-    "LIFEINVADER",
-    "LJT",
-    "LS_CUSTOMS",
-    "LS_TOURIST_BOARD",
-    "MALC",
-    "MANUEL",
-    "MARNIE",
-    "MARTIN",
-    "MARY_ANN",
-    "MAUDE",
-    "MECHANIC",
-    "MICHAEL",
-    "MIKE_FRANK_CONF",
-    "MIKE_TREV_CONF",
-    "MILSITE",
-    "MINOTAUR",
-    "MOLLY",
-    "MP_ARMY_CONTACT",
-    "MP_BIKER_BOSS",
-    "MP_BIKER_MECHANIC",
-    "MP_BRUCIE"
-}
+TriggerEvent('chat:addSuggestion', '/FShowNotification', 'Shows a standard notification', {
+    { name="message", help="The message" },
+    { name="timeout", help="Timeout in ms" },
+    { name="position", help="Position to show notification" },
+    { name="progress", help="Show the progress bar" }
+}) 
 
-function table.slice(tbl, first, last, step)
-    local sliced = {}
+TriggerEvent('chat:addSuggestion', '/FShowAdvancedNotification', 'Shows an advanced notification', {
+    { name="message", help="The message" },
+    { name="title", help="The title" },
+    { name="subject", help="The subject" },
+    { name="timeout", help="Timeout in ms" },
+    { name="position", help="Position to show notification" },
+    { name="progress", help="Show the progress bar" }
+}) 
+
+RegisterCommand('FShowNotification', function(source, args)
+    local message   = args[1]
+    local timeout   = args[2] or Config.Timeout
+    local position  = args[3] or Config.Position
+    local progress  = args[4] or Config.Progress
+
+    ShowNotification(message, timeout, position, progress)
+end)
+
+RegisterCommand('FShowAdvancedNotification', function(source, args)
+
+    local message   = args[1]
+    local title     = args[2] or "This is a title"
+    local subject   = args[3] or "This is a subject"
+    local timeout   = args[4] or Config.Timeout
+    local position  = args[5] or Config.Position
+    local progress  = args[6] or Config.Progress
+    local icon, _   = selectRandomAssociative(Config.Pictures)
     
-    for i = first or 1, last or #tbl, step or 1 do
-        sliced[#sliced+1] = tbl[i]
+    ShowAdvancedNotification(message, title, subject, icon, timeout, position, progress)    
+end)
+
+RegisterCommand('FShowNotificationFlood', function(source, args)
+    math.randomseed(GetGameTimer())
+
+    Citizen.CreateThread(function()
+        for i = 1, 5 do
+            CommandNotification("bottomleft")
+            Citizen.Wait(250)
+            CommandNotification("bottomright")
+            Citizen.Wait(250)
+            CommandNotification("topleft")
+            Citizen.Wait(250)
+            CommandNotification("topright")
+            Citizen.Wait(250)
+            CommandNotification("top")
+            Citizen.Wait(250)
+            CommandNotification("bottom")
+            Citizen.Wait(250)
+        end
+    end)
+end)
+
+RegisterCommand('FShowNotificationQueued', function(source, args)
+    math.randomseed(GetGameTimer())
+
+    Citizen.CreateThread(function()
+        for i = 1, 15 do
+            CommandNotification("bottomleft", "normal")
+            Citizen.Wait(250)
+        end
+    end)
+end)
+
+RegisterCommand('FShowUneven', function(source, args)
+    math.randomseed(GetGameTimer())
+
+    Citizen.CreateThread(function()
+        for i = 1, 6 do
+            local timeout = math.random(5000, 10000)
+            ShowNotification("Random Timeout: ~b~" .. timeout, timeout, "bottomleft", true)
+            -- Citizen.Wait(25)
+        end
+    end)
+end)
+
+
+
+function CommandNotification(position, type)
+    math.randomseed(GetGameTimer())
+
+    local types     = { "normal", "advanced" }
+    local positions = { "bottomleft", "bottomright", "topleft", "topright", "top", "bottom" }
+    local title     = "This is the ~g~title"
+    local subject   = "This is the ~r~subject"
+    local message   = "~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci."
+    local timeout   = Config.Timeout
+
+    if position == nil then
+        position = selectRandom(positions)
     end
     
-    return sliced
+    if type == nil then
+        type = selectRandom(types)
+    end    
+    
+    if type == "normal" then
+        ShowNotification(message, timeout, position, true)
+    else
+        local key, value = selectRandomAssociative(Config.Pictures)
+        ShowAdvancedNotification(message, title, subject, key, timeout, position, true)
+    end     
 end
 
+function selectRandom(arr)
+    return arr[ math.random( #arr ) ]
+end
 
-RegisterCommand("addMessage", function(source, args, raw)
-    if args[1] ~= nil then
-        local str = table.concat(args, " ")
-
-        ShowNotification(str)
-    end
-end)
-
-RegisterCommand("addAdvancedMessage", function(source, args, raw)
-    if args[1] ~= nil then
-        local Message = table.slice(args, 3)
-        Message = table.concat(Message, " ")
-
-        ShowAdvancedNotification(args[1], args[2], Message, "CHAR_" .. random_elem(icons))
-    end
-end)
-
-RegisterCommand("queuedMessages", function(source, args, raw)
-    Citizen.CreateThread(function()
-        Citizen.Wait(2000)
-        for i = 1, 10 do
-            local type = random_elem(arr)
-
-            if type == "standard" or type == "standard_long" then
-                ShowNotification("~g~FeedM: ~s~Queued Notification ~b~" .. i)
-            elseif type == "advanced" or type == "advanced_long" then
-                ShowAdvancedNotification("Title", "Subtitle", "~g~FeedM: ~s~Queued Notification ~b~" .. i, "CHAR_" .. random_elem(icons))
-            end  
-            
-            Citizen.Wait(1000) 
-        end
-    end)
-end)
-
-
-RegisterCommand("demoMessage", function(source, args, raw)
-
-    Citizen.CreateThread(function()
-        Citizen.Wait(2000)
-        ShowNotification("This is a ~b~notification", 5000)
-        Citizen.Wait(1000)
-        ShowAdvancedNotification("Title", "Subtitle", "This is an ~g~advanced ~b~notification", "CHAR_" .. random_elem(icons), 5000)
-        Citizen.Wait(1000)        
-        ShowNotification("~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", 5000)
-        Citizen.Wait(1000)
-        ShowAdvancedNotification("Title", "Subtitle", "~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", "CHAR_" .. random_elem(icons), 5000)
-        Citizen.Wait(1000)
-   
-
-        for i = 1, 10 do
-            local type = random_elem(arr)
-
-            if type == "standard" then
-                ShowNotification("This is a ~b~notification", 5000, random_elem(types))
-                Citizen.Wait(1000) 
-            elseif type == "standard_long" then
-                ShowNotification("~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", 5000, random_elem(types))
-                Citizen.Wait(1000) 
-            elseif type == "advanced" then
-                ShowAdvancedNotification("Title", "Subtitle", "This is an ~g~advanced ~b~notification", "CHAR_" .. random_elem(icons), 5000, random_elem(types))
-                Citizen.Wait(1000) 
-            elseif type == "advanced_long" then
-                ShowAdvancedNotification("Title", "Subtitle", "~b~Lorem ~w~ipsum dolor sit amet, consectetur ~g~adipiscing elit, ~r~sed do eiusmod ~w~tempor inci.", "CHAR_" .. random_elem(icons), 5000, random_elem(types))
-                Citizen.Wait(1000) 
-            end
-        end
-    end)
-end)
-
-function random_elem(tb)
+function selectRandomAssociative(arr)
+    -- Insert the keys of the table into an array
     local keys = {}
-    for k in pairs(tb) do table.insert(keys, k) end
-    return tb[keys[math.random(#keys)]]
+
+    for key, _ in pairs(arr) do
+        table.insert(keys, key)
+    end
+
+    -- Get the amount of possible values
+    local max = #keys
+    local number = math.random(1, max)
+    local selectedKey = keys[number]
+
+    -- Return the value
+    return selectedKey, arr[selectedKey]
 end
