@@ -117,7 +117,8 @@ body {
     transform-origin: 0 0 0;
 }
 
-.feedm-notification .w {
+.feedm-notification .w,
+.feedm-notification .s {
     color: #fff;
 }
 
@@ -131,6 +132,22 @@ body {
 
 .feedm-notification .b {
     color: #0099cc;
+}
+
+.feedm-notification .u {
+    color: #000;
+}
+
+.feedm-notification .o {
+    color: #FF6D00;
+}
+
+.feedm-notification .y {
+    color: #FFD600;
+}
+
+.feedm-notification .p {
+    color: #6200EA;
 }
 
 .feedm-notification .h {
