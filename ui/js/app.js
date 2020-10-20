@@ -176,7 +176,11 @@ class Notification {
     }
 
     parseMessage(message) {
-        return message.replace(/~([\w])~([^~]+)/g, "<span class='$1'>$2</span>");
+        const regex = /~([\w])~([^~]+)/g;
+        while (message.match(regex)) {
+            message = message.replace(regex, "<span class='$1'>$2</span>");
+        }
+        return message;
     }
 }
 
@@ -286,7 +290,7 @@ class AdvancedNotification extends Notification {
 }
 
 
-const onData = function(e) {
+const onData = function (e) {
     const data = e.data;
     if (data.type) {
         MaxQueue = data.config.Queue;
@@ -298,6 +302,6 @@ const onData = function(e) {
     }
 };
 
-window.onload = function(e) {
+window.onload = function (e) {
     window.addEventListener('message', onData);
 };
