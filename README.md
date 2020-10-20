@@ -37,3 +37,18 @@ Then use the custom code in the notification call:
 ```lua
 TriggerEvent("FeedM2:ShowAdvancedNotification", "Message", "Title", "Subject", "MY_CUSTOM_ICON_CODE")
 ```
+
+## Formatting
+FeedM `v2.0.0-alpha` supports the following standard formatting variables:
+
+```lua
+~r~ = Red
+~b~ = Blue
+~g~ = Green
+~y~ = Yellow
+~p~ = Purple
+~o~ = Orange
+~u~ = Black
+~s~ / ~w~ = White
+~h~ = Bold Text
+```
