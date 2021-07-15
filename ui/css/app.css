@@ -78,11 +78,17 @@ body {
     width: 13.5vw;
     padding: 10px;
     opacity: 0;
-    color: #fff;
-    background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.90)), to(rgba(0, 0, 0, 0.50)));
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.50) 100%);
-    font-family: "ChaletComprime";
     font-size: 22px;
+    border-radius: 5px;
+    color: #fff;
+    background: -webkit-gradient(linear, left top, right top, from(rgba(21, 23, 32, 0.9)), to(rgba(21, 23, 32, 0.2)));
+    background: linear-gradient(to right, rgba(21, 23, 32, 0.9) 0%, rgba(21, 23, 32, 0.2) 100%);    
+    font-family: "ChaletComprime";  
+    overflow: hidden;  
+}
+
+.feedm-notification.default .notification-title {
+    color: #fff
 }
 
 .feedm-notification.with-progress {
@@ -94,9 +100,12 @@ body {
 }
 
 .feedm-notification .notification-icon {
-    width: 68px;
+    width: 64px;
+    height: 64px;
     float: left;
     margin-right: 10px;
+    border-radius: 3px;
+    overflow: hidden;
 }
 
 .feedm-notification .notification-progress {
@@ -123,31 +132,15 @@ body {
 }
 
 .feedm-notification .r {
-    color: #f64646;
+    color: #ef075d;
 }
 
 .feedm-notification .g {
-    color: #99cc00;
+    color: #a3ff12;
 }
 
 .feedm-notification .b {
     color: #0099cc;
-}
-
-.feedm-notification .u {
-    color: #000;
-}
-
-.feedm-notification .o {
-    color: #FF6D00;
-}
-
-.feedm-notification .y {
-    color: #FFD600;
-}
-
-.feedm-notification .p {
-    color: #6200EA;
 }
 
 .feedm-notification .h {
@@ -155,9 +148,9 @@ body {
 }
 
 .feedm-notification.active {
-    opacity: 0;
-    -webkit-animation: fadeIn 500ms ease 0ms forwards;
-    animation: fadeIn 500ms ease 0ms forwards;
+    /* opacity: 0; */
+    /* -webkit-animation: fadeIn 500ms ease 0ms forwards;
+    animation: fadeIn 500ms ease 0ms forwards; */
 }
 
 .feedm-notification.active .notification-bar {
@@ -167,11 +160,11 @@ body {
     animation-timing-function: linear;
 }
 
-.feedm-notification.hiding {
+/* .feedm-notification.hiding {
     opacity: 1;
     -webkit-animation: fadeOut 500ms ease 0ms forwards;
     animation: fadeOut 500ms ease 0ms forwards;
-}
+} */
 
 .feedm-notification.hiding .notification-bar {
     width: 0%;

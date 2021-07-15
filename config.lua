@@ -3,7 +3,10 @@ Config = {}
 Config.Timeout  = 5000
 Config.Position = "bottomleft"
 Config.Progress = false
-Config.Queue    = 6
+Config.Queue    = 5             -- No. of notifications to show before queueing
+Config.FadeTime = 500           -- The fadeIn / fadeOut time in ms
+Config.EnableSound = true
+Config.SoundFile = "juntos.ogg"
 
 -- Pictures for advanced notifications
 --
@@ -13,7 +16,15 @@ Config.Queue    = 6
 --
 -- ShowAdvancedNotification(message, title, subject, "MY_CUSTOM_ICON_CODE", 5000, "bottomleft")
 --
+
 Config.Pictures = {
+    POLICE                           = "police.jpg",
+    CHAR_ZOOPLA                      = "Char_zoopla.jpg",
+    CHAR_DOMINOS                     = "Char_dominos.jpg",
+    CHAR_ROYAL_MAIL                  = "Char_royal_mail.jpg",
+    CHAR_BIFFA                       = "Char_biffa.jpg",
+    CHAR_DPD                         = "Char_dpd.jpg",
+    CHAR_YODEL                       = "Char_yodel.jpg",
     CHAR_ABIGAIL                     = "Char_abigail.jpg",
     CHAR_ACTING_UP                   = "Char_acting_up.jpg",
     CHAR_AGENT14                     = "Char_agent14.jpg",

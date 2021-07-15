@@ -1,0 +1,48 @@
+@font-face {
+    font-family: "RajdhaniRegular";
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/Rajdhani-Regular.ttf');    
+}
+
+@font-face {
+    font-family: "RajdhaniMedium";
+    font-style: medium;
+    font-weight: medium;
+    src: url('../fonts/Rajdhani-Medium.ttf');    
+}
+
+
+@font-face {
+    font-family: "RajdhaniSemiBold";
+    font-style: medium;
+    font-weight: medium;
+    src: url('../fonts/Rajdhani-SemiBold.ttf');    
+}
+
+.feedm-notification {
+    font-family: "RajdhaniSemiBold";
+    font-size: 18px;
+}
+
+.feedm-notification.default .notification-title {
+    color: #a3ff12
+}
+
+.feedm-notification.success {
+    color: #000;
+    background: #a3ff12;
+}
+
+.feedm-notification.success .notification-title {
+    color: #000
+}
+
+.feedm-notification.danger {
+    color: #fff;
+    background: #ef075d;
+}
+
+.feedm-notification.danger .notification-title {
+    color: #fff
+}

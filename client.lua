@@ -1,7 +1,11 @@
-function ShowNotification(message, timeout, position, progress)
+function ShowNotification(message, timeout, position, progress, theme)
 
     if message == nil then
         return PrintError("^1FEEDM2 ERROR: ^7Notification message is nil")
+    end
+
+    if type(message) == "number" then
+        message = tostring(message)
     end
 
     if not tonumber(timeout) then
@@ -21,7 +25,8 @@ function ShowNotification(message, timeout, position, progress)
         message     = message,
         timeout     = timeout,
         position    = position,
-        progress    = progress
+        progress    = progress,
+        theme       = theme,
     })
 end
 
@@ -29,6 +34,10 @@ function ShowAdvancedNotification(message, title, subject, icon, timeout, positi
 
     if message == nil then
         return PrintError("^1FEEDM2 ERROR: ^7Notification message is nil")
+    end
+
+    if type(message) == "number" then
+        message = tostring(message)
     end
 
     if title == nil then
@@ -64,7 +73,7 @@ function ShowAdvancedNotification(message, title, subject, icon, timeout, positi
 end
 
 function AddNotification(data)
-    data.config = Config;
+    data.config = Config
     SendNUIMessage(data)
 end
 
@@ -75,5 +84,13 @@ function PrintError(message)
     print(s)  
 end
 
+RegisterNetEvent("FeedM2:ShowNotification")
+RegisterNetEvent("FeedM2:ShowAdvancedNotification")
+
 AddEventHandler("FeedM2:ShowNotification", ShowNotification)
 AddEventHandler("FeedM2:ShowAdvancedNotification", ShowAdvancedNotification)
+
+RegisterNUICallback('bulletin_active', function(data, cb)
+    -- TriggerEvent('InteractSound_CL:PlayOnOne', "juntos", 1.0)
+    cb(data)
+end)

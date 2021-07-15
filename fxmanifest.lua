@@ -19,11 +19,12 @@ ui_page 'ui/ui.html'
 files {
     'ui/ui.html',
     'ui/images/*',
-    'ui/fonts/ChaletComprimeCologneSixty.ttf',
+    'ui/fonts/*.ttf',
     'ui/css/app.css',
+    'ui/css/themes.css',
     'ui/js/app.js'
 }
 
 export 'ShowNotification'
--- export 'ShowAdvancedNotification'
+export 'ShowAdvancedNotification'
 -- export 'Clear'

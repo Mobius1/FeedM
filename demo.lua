@@ -2,7 +2,8 @@ TriggerEvent('chat:addSuggestion', '/FShowNotification', 'Shows a standard notif
     { name="message", help="The message" },
     { name="timeout", help="Timeout in ms" },
     { name="position", help="Position to show notification" },
-    { name="progress", help="Show the progress bar" }
+    { name="progress", help="Show the progress bar" },
+    { name="theme", help="The theme to use" }
 }) 
 
 TriggerEvent('chat:addSuggestion', '/FShowAdvancedNotification', 'Shows an advanced notification', {
@@ -19,8 +20,9 @@ RegisterCommand('FShowNotification', function(source, args)
     local timeout   = args[2] or Config.Timeout
     local position  = args[3] or Config.Position
     local progress  = args[4] or Config.Progress
+    local theme     = args[5]
 
-    ShowNotification(message, timeout, position, progress)
+    ShowNotification(message, timeout, position, progress, theme)
 end)
 
 RegisterCommand('FShowAdvancedNotification', function(source, args)
@@ -34,6 +36,22 @@ RegisterCommand('FShowAdvancedNotification', function(source, args)
     local icon, _   = selectRandomAssociative(Config.Pictures)
     
     ShowAdvancedNotification(message, title, subject, icon, timeout, position, progress)    
+end)
+
+
+RegisterCommand('FShowNotificationThemes', function(source, args)
+
+    math.randomseed(GetGameTimer())
+
+    Citizen.CreateThread(function()
+        local themes = { "default", "success", "danger" }
+
+        for _, theme in ipairs(themes) do
+            ShowNotification(theme, 5000, "bottomleft", false, theme)
+            Citizen.Wait(500)
+        end
+    end)
+
 end)
 
 RegisterCommand('FShowNotificationFlood', function(source, args)
@@ -73,7 +91,7 @@ RegisterCommand('FShowUneven', function(source, args)
 
     Citizen.CreateThread(function()
         for i = 1, 6 do
-            local timeout = math.random(5000, 10000)
+            local timeout = math.random(1000, 10000)
             ShowNotification("Random Timeout: ~b~" .. timeout, timeout, "bottomleft", true)
             -- Citizen.Wait(25)
         end

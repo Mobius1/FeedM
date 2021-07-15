@@ -1,5 +1,7 @@
 const FeedMContainers = {};
 let MaxQueue = 5
+let styled = false;
+
 
 class NotificationContainer {
     constructor(position) {
@@ -83,6 +85,8 @@ class Notification {
                 this.barEl.style.animationDuration = `${this.interval}ms`;
             }
 
+            PostData("active")
+
             const r = this.el.getBoundingClientRect();
 
             for (const n of this.container.notifications) {
@@ -93,7 +97,7 @@ class Notification {
                         n.moveDown(r.height, true);
                     }
                 }
-            }
+            }         
 
             setTimeout(() => {
                 this.el.classList.remove("active");
@@ -101,21 +105,23 @@ class Notification {
 
                 this.container.unqueueNotification(this);
 
-                const index = this.container.notifications.indexOf(this);
-
-                for (var i = this.container.notifications.length - 1; i > index; i--) {
-                    const n = this.container.notifications[i];
-
-                    if (this.bottom) {
-                        n.moveDown(r.height);
-                    } else {
-                        n.moveUp(r.height);
-                    }
-                }
-
                 setTimeout(() => {
-                    this.container.removeNotification(this);
-                }, 100);
+                    const index = this.container.notifications.indexOf(this);
+
+                    for (var i = this.container.notifications.length - 1; i > index; i--) {
+                        const n = this.container.notifications[i];
+
+                        if (this.bottom) {
+                            n.moveDown(r.height);
+                        } else {
+                            n.moveUp(r.height);
+                        }
+                    }
+
+                    setTimeout(() => {
+                        this.container.removeNotification(this);
+                    }, 100);
+                }, this.cfg.FadeTime);
             }, this.interval);
         } else {
             setTimeout(() => {
@@ -175,26 +181,32 @@ class Notification {
         }, 250);
     }
 
-    parseMessage(message) {
-        const regex = /~([\w])~([^~]+)/g;
-        while (message.match(regex)) {
-            message = message.replace(regex, "<span class='$1'>$2</span>");
-        }
+    parseMessage(message, count = 4) {
+        const regexColor = /~([^h])~([^~]+)/g;	
+        const regexBold = /~([h])~([^~]+)/g;	
+        const regexStop = /~s~/g;	
+    
+        message = message.replace(regexColor, "<span class='$1'>$2</span>");
+        message = message.replace(regexBold, "<span class='$1'>$2</span>");
+        message = message.replace(regexStop, "");
+			
         return message;
     }
 }
 
 class StandardNotification extends Notification {
-    constructor(message, interval, position, progress = false) {
+    constructor(cfg, message, interval, position, progress = false, theme = "default") {
 
         super();
 
+        this.cfg = cfg;
         this.message = message;
         this.interval = interval;
         this.position = position;
         this.message = message;
         this.progress = progress;
         this.offset = 0;
+        this.theme = theme;
 
         this.init();
     }
@@ -202,8 +214,13 @@ class StandardNotification extends Notification {
     init() {
         this.el = document.createElement("div");
         this.el.classList.add("feedm-notification");
+        
         this.message = this.parseMessage(this.message);
         this.el.innerHTML = this.message;
+
+        if ( this.theme ) {
+            this.el.classList.add(this.theme);
+        }        
 
         if (this.progress) {
             this.el.classList.add("with-progress");
@@ -221,10 +238,11 @@ class StandardNotification extends Notification {
 }
 
 class AdvancedNotification extends Notification {
-    constructor(message, title, subject, icon, interval, position, progress = false) {
+    constructor(cfg, message, title, subject, icon, interval, position, progress = false, theme = "default") {
 
         super();
 
+        this.cfg = cfg
         this.message = message;
         this.interval = interval;
         this.position = position;
@@ -234,6 +252,7 @@ class AdvancedNotification extends Notification {
         this.icon = icon;
         this.progress = progress;
         this.offset = 0;
+        this.theme = theme;
 
         this.init();
     }
@@ -246,6 +265,10 @@ class AdvancedNotification extends Notification {
 
         this.el = document.createElement("div");
         this.el.classList.add("feedm-notification");
+
+        if ( this.theme ) {
+            this.el.classList.add(this.theme);
+        }
 
         this.headerEl = document.createElement("div");
         this.headerEl.classList.add("notification-header");
@@ -289,19 +312,48 @@ class AdvancedNotification extends Notification {
     }
 }
 
+function PostData(type = "", data = {}) {
+    fetch(`https://${GetParentResourceName()}/bulletin_${type}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify(data)
+    }).then(resp => resp.json()).then(resp => resp).catch(error => console.log('bcbrp_shops FETCH ERROR! ' + error.message));    
+}
 
-const onData = function (e) {
+const onData = function(e) {
     const data = e.data;
     if (data.type) {
+
+        if ( !styled ) {
+            const css = `
+            .feedm-notification.active {
+                opacity: 0;
+                -webkit-animation: fadeIn ${data.config.FadeTime}ms ease 0ms forwards;
+                animation: fadeIn ${data.config.FadeTime}ms ease 0ms forwards;
+            }
+            
+            .feedm-notification.hiding {
+                opacity: 1;
+                -webkit-animation: fadeOut ${data.config.FadeTime}ms ease 0ms forwards;
+                animation: fadeOut ${data.config.FadeTime}ms ease 0ms forwards;
+            }`;
+
+            document.head.insertAdjacentHTML("beforeend", `<style>${css}</style>`);
+
+            styled = true
+        }
+
         MaxQueue = data.config.Queue;
         if (data.type == "standard") {
-            new StandardNotification(data.message, data.timeout, data.position, data.progress).show();
+            new StandardNotification(data.config, data.message, data.timeout, data.position, data.progress, data.theme).show();
         } else {
-            new AdvancedNotification(data.message, data.title, data.subject, data.icon, data.timeout, data.position, data.progress).show();
+            new AdvancedNotification(data.config, data.message, data.title, data.subject, data.icon, data.timeout, data.position, data.progress, data.theme).show();
         }
     }
 };
 
-window.onload = function (e) {
+window.onload = function(e) {
     window.addEventListener('message', onData);
 };
