@@ -185,10 +185,12 @@ class Notification {
         const regexColor = /~([^h])~([^~]+)/g;	
         const regexBold = /~([h])~([^~]+)/g;	
         const regexStop = /~s~/g;	
+        const regexLine = /\n/g;	
     
         message = message.replace(regexColor, "<span class='$1'>$2</span>");
         message = message.replace(regexBold, "<span class='$1'>$2</span>");
         message = message.replace(regexStop, "");
+        message = message.replace(regexLine, "<br />");
 			
         return message;
     }

@@ -143,6 +143,14 @@ body {
     color: #0099cc;
 }
 
+.feedm-notification .y {
+    color: #ffcc00
+}
+
+.feedm-notification .o {
+    color: #F76A2E;
+}
+
 .feedm-notification .h {
     font-weight: bold;
 }
