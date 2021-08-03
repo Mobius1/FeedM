@@ -1,3 +1,5 @@
+# ABANDONED - SEE THE SUCCESSOR [HERE](https://github.com/Mobius1/bulletin)
+
 # FeedM
 Customisable native feed notifications for FiveM
 
